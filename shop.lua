@@ -83,13 +83,11 @@ end
 minetest.register_node("currency:shop", {
 	description = "Shop",
 	paramtype2 = "facedir",
-	tiles = {"shop_top.png",
-	                "shop_top.png",
-			"shop_side.png",
-			"shop_side.png",
-			"shop_side.png",
-			"shop_front.png"},
-	inventory_image = "shop_front.png",
+	tiles = {
+				"shop_top.png",  "shop_top.png",
+				"shop_side.png", "shop_side.png",
+				"shop_side.png", "shop_front.png"
+			},
 	groups = {choppy=2,oddly_breakable_by_hand=2},
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer, itemstack)

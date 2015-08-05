@@ -16,7 +16,6 @@ end
 
 minetest.register_node("currency:safe", {
         description = "Safe",
-	inventory_image = "safe_front.png",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	tiles = {"safe_side.png",

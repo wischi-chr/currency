@@ -96,7 +96,6 @@ minetest.register_node("currency:barter", {
 	tiles = {"barter_top.png",
 	                "barter_base.png",
 	                "barter_side.png"},
-	inventory_image = "barter_top.png",
 	node_box = {
 		type = "fixed",
 		fixed = {
