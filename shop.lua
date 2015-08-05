@@ -33,52 +33,6 @@ default.shop.formspec = {
 	end,
 }
 
-default.shop.check_privilege = function(listname,playername,meta)
-	--[[if listname == "pl1" then
-		if playername ~= meta:get_string("pl1") then
-			return false
-		elseif meta:get_int("pl1step") ~= 1 then
-			return false
-		end
-	end
-	if listname == "pl2" then
-		if playername ~= meta:get_string("pl2") then
-			return false
-		elseif meta:get_int("pl2step") ~= 1 then
-			return false
-		end
-	end]]
-	return true
-end
-
-
-default.shop.give_inventory = function(inv,list,playername)
-	player = minetest.get_player_by_name(playername)
-	if player then
-		for k,v in ipairs(inv:get_list(list)) do
-			player:get_inventory():add_item("main",v)
-			inv:remove_item(list,v)
-		end
-	end
-end
-
-default.shop.cancel = function(meta)
-	--[[default.shop.give_inventory(meta:get_inventory(),"pl1",meta:get_string("pl1"))
-	default.shop.give_inventory(meta:get_inventory(),"pl2",meta:get_string("pl2"))
-	meta:set_string("pl1","")
-	meta:set_string("pl2","")
-	meta:set_int("pl1step",0)
-	meta:set_int("pl2step",0)]]
-end
-
-default.shop.exchange = function(meta)
-	--[[default.shop.give_inventory(meta:get_inventory(),"pl1",meta:get_string("pl2"))
-	default.shop.give_inventory(meta:get_inventory(),"pl2",meta:get_string("pl1"))
-	meta:set_string("pl1","")
-	meta:set_string("pl2","")
-	meta:set_int("pl1step",0)
-	meta:set_int("pl2step",0)]]
-end
 
 minetest.register_node("currency:shop", {
 	description = "Shop",
