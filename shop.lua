@@ -49,8 +49,6 @@ minetest.register_node("currency:shop", {
 		local meta = minetest.get_meta(pos)
 		meta:set_string("infotext", "Exchange shop (owned by "..owner..")")
 		meta:set_string("owner",owner)
-		--[[meta:set_string("pl1","")
-		meta:set_string("pl2","")]]
 		local inv = meta:get_inventory()
 		inv:set_size("customers_gave", 3*2)
 		inv:set_size("stock", 3*2)
