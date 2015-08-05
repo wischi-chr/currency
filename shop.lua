@@ -141,51 +141,55 @@ minetest.register_on_player_receive_fields(function(sender, formname, fields)
 		local name = sender:get_player_name()
 		local pos = default.shop.current_shop[name]
 		local meta = minetest.get_meta(pos)
-		if meta:get_string("owner") == name then
-			minetest.chat_send_player(name,"This is your own shop, you can't exchange to yourself !")
-		else
-			local minv = meta:get_inventory()
-			local pinv = sender:get_inventory()
-			local invlist_tostring = function(invlist)
-				local out = {}
-				for i, item in pairs(invlist) do
-					out[i] = item:to_string()
-				end
-				return out
+		local minv = meta:get_inventory()
+		local pinv = sender:get_inventory()
+		local invlist_tostring = function(invlist)
+			local out = {}
+			for i, item in pairs(invlist) do
+				out[i] = item:to_string()
 			end
-			local wants = minv:get_list("owner_wants")
-			local gives = minv:get_list("owner_gives")
-			if wants == nil or gives == nil then return end -- do not crash the server
-			-- Check if we can exchange
-			local can_exchange = true
-			local owners_fault = false
-			for i, item in pairs(wants) do
-				if not pinv:contains_item("customer_gives",item) then
-					can_exchange = false
-				end
+			return out
+		end
+		local wants = minv:get_list("owner_wants")
+		local gives = minv:get_list("owner_gives")
+		if wants == nil or gives == nil then return end -- do not crash the server
+		
+		-- Check if we can exchange
+		local can_exchange = true
+		local owners_fault = false
+		
+		-- (A) Check if placed items are correct
+		for i, item in pairs(wants) do
+			if not pinv:contains_item("customer_gives",item) then
+				can_exchange = false
 			end
+		end
+		
+		-- (B) Check if there is enough stuff to exchange (if A didn't fail)
+		if can_exchange then
 			for i, item in pairs(gives) do
 				if not minv:contains_item("stock",item) then
 					can_exchange = false
 					owners_fault = true
 				end
 			end
-			if can_exchange then
-				for i, item in pairs(wants) do
-					pinv:remove_item("customer_gives",item)
-					minv:add_item("customers_gave",item)
-				end
-				for i, item in pairs(gives) do
-					minv:remove_item("stock",item)
-					pinv:add_item("customer_gets",item)
-				end
-				minetest.chat_send_player(name,"Exchanged!")
+		end
+		
+		if can_exchange then
+			for i, item in pairs(wants) do
+				pinv:remove_item("customer_gives",item)
+				minv:add_item("customers_gave",item)
+			end
+			for i, item in pairs(gives) do
+				minv:remove_item("stock",item)
+				pinv:add_item("customer_gets",item)
+			end
+			minetest.chat_send_player(name,"Exchanged!")
+		else
+			if owners_fault then
+				minetest.chat_send_player(name,"Exchange can not be done, contact the shop owner.")
 			else
-				if owners_fault then
-					minetest.chat_send_player(name,"Exchange can not be done, contact the shop owner.")
-				else
-					minetest.chat_send_player(name,"Exchange can not be done, check if you put all items !")
-				end
+				minetest.chat_send_player(name,"Exchange can not be done, check if you put all items !")
 			end
 		end
 	end
